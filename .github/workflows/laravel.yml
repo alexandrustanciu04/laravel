@@ -20,8 +20,9 @@ jobs:
     - name: Adding Known Hosts
       run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
     - name: Deploy with rsync
-      run: rsync -chav -e "ssh -p ${{ secrets.SSH_PORT }}" ../bootstrap/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/laravel    
-    
+      run: rsync -chav \    
+       -e 'ssh -p ${{ secrets.SSH_PORT }}' \
+       ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/laravel
     - uses: actions/checkout@v3
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
